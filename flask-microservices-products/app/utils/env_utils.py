@@ -4,11 +4,11 @@ import dotenv
 
 
 class EnvUtils:
-    _alreadyLoaded = False
+    _already_loaded = False
 
     @classmethod
     def get_env(cls, key, default=None):
-        if not cls._alreadyLoaded:
+        if not cls._already_loaded:
             cls._load_env()
 
         return os.getenv(key, default)
@@ -16,4 +16,4 @@ class EnvUtils:
     @classmethod
     def _load_env(cls):
         dotenv.load_dotenv()
-        cls._alreadyLoaded = True
+        cls._already_loaded = True
