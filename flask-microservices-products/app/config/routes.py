@@ -1,10 +1,10 @@
-from flask_restful import Api
+from flask_smorest import Api
 
 
 def configure_routes(app):
-    from app.resources.product_resource import ProductResource
-    from app.resources.product_resource import ProductListResource
+    app.config['OPENAPI_VERSION'] = '3.0.2'
+
+    from app.resources.product_resource import blp
 
     api = Api(app)
-    api.add_resource(ProductResource, '/products/<string:id>')
-    api.add_resource(ProductListResource, '/products')
+    api.register_blueprint(blp)

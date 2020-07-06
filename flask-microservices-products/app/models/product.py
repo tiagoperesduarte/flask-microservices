@@ -16,12 +16,3 @@ class Product(db.Document):
             description=data['description'],
             price=data['price']
         )
-
-    def to_dict(self):
-        return {
-            'id': str(self.id),
-            'name': self.name,
-            'description': self.description,
-            'price': self.price,
-            'created_on': str(self.created_on)
-        }

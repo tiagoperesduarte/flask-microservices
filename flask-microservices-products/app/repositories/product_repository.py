@@ -13,6 +13,14 @@ class ProductRepository:
         except DoesNotExist as err:
             return None
 
+    def product_exists_by_id(self, id):
+        product = self.get_product_by_id(id)
+
+        if not product:
+            return False
+
+        return True
+
     def save_product(self, product):
         return product.save()
 

@@ -1,55 +1,52 @@
-from flask_restful import Resource, reqparse
+from flask.views import MethodView
+from flask_smorest import Blueprint, abort
 
+from app.errors.resource_not_found_error import ResourceNotFoundError
 from app.models.product import Product
+from app.schemas.product_schema import ProductSchema
 from app.services.product_service import ProductService
+
+blp = Blueprint(
+    'products', 'products', url_prefix='/api/products'
+)
 
 product_service = ProductService()
 
-parser = reqparse.RequestParser()
-parser.add_argument('name', type=str, required=True)
-parser.add_argument('description', type=str, required=True)
-parser.add_argument('price', type=float, required=True)
 
-
-class ProductResource(Resource):
-    def get(self, id):
-        product = product_service.get_product_by_id(id)
-
-        if not product:
-            return {'message': f'Product not found with identifier {id}'}, 404
-
-        return product.to_dict()
-
-    def put(self, id):
-        product = product_service.get_product_by_id(id)
-
-        if not product:
-            return {'message': f'Product not found with identifier {id}'}, 404
-
-        data = parser.parse_args()
-        product.name = data['name']
-        product.description = data['description']
-        product.price = data['price']
-
-        saved_product = product_service.save_product(product)
-
-        return saved_product.to_dict()
-
-    def delete(self, id):
-        product = product_service.get_product_by_id(id)
-
-        if not product:
-            return {'message': f'Product not found with identifier {id}'}, 404
-
-        product_service.delete_product_by_id(id)
-
-
-class ProductListResource(Resource):
+@blp.route('')
+class Products(MethodView):
+    @blp.response(ProductSchema(many=True))
     def get(self):
-        return [product.to_dict() for product in product_service.get_products()]
+        return product_service.get_products()
 
-    def post(self):
-        data = parser.parse_args()
-        saved_product = product_service.save_product(Product.from_dict(data))
+    @blp.arguments(ProductSchema)
+    @blp.response(ProductSchema, code=201)
+    def post(self, data):
+        product = Product.from_dict(data)
+        return product_service.create_product(product)
 
-        return saved_product.to_dict(), 201
+
+@blp.route('/<product_id>')
+class ProductsById(MethodView):
+    @blp.response(ProductSchema)
+    def get(self, product_id):
+        try:
+            return product_service.get_product_by_id(product_id)
+        except ResourceNotFoundError as e:
+            abort(404, message=str(e))
+
+    @blp.arguments(ProductSchema)
+    @blp.response(ProductSchema)
+    def put(self, data, product_id):
+        try:
+            product = Product.from_dict(data)
+            return product_service.update_product(product_id, product)
+        except ResourceNotFoundError as e:
+            abort(404, message=str(e))
+
+    @blp.response(code=204)
+    def delete(self, product_id):
+        try:
+            product_service.delete_product_by_id(product_id)
+        except ResourceNotFoundError as e:
+            abort(404, message=str(e))
