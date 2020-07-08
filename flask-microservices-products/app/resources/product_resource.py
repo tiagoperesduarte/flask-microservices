@@ -3,7 +3,7 @@ from flask_smorest import Blueprint, abort
 
 from app.errors.resource_not_found_error import ResourceNotFoundError
 from app.models.product import Product
-from app.schemas.product_schema import ProductRequestSchema, ProductResponseSchema
+from app.schemas.product_schema import ProductRequestSchema, ProductResponseSchema, ProductQueryArgsSchema
 from app.services.product_service import ProductService
 
 product_blp = Blueprint(
@@ -15,9 +15,14 @@ product_service = ProductService()
 
 @product_blp.route('')
 class Products(MethodView):
+    @product_blp.arguments(ProductQueryArgsSchema, location='query')
     @product_blp.response(ProductResponseSchema(many=True))
-    def get(self):
-        return product_service.get_products()
+    def get(self, args):
+        name = args.get('name')
+        page = args.get('page', 1)
+        per_page = args.get('per_page', 10)
+
+        return product_service.get_products(name, page, per_page)
 
     @product_blp.arguments(ProductRequestSchema)
     @product_blp.response(ProductResponseSchema, code=201)

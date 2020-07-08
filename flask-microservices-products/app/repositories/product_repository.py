@@ -1,11 +1,19 @@
+from flask_mongoengine import Pagination
 from mongoengine import DoesNotExist
 
 from app.models.product import Product
 
 
 class ProductRepository:
-    def get_products(self):
-        return Product.objects
+    def get_products(self, name, page, per_page):
+        products = []
+
+        if not name:
+            products = Product.objects()
+        else:
+            products = Product.objects(name__contains=name)
+
+        return Pagination(products, page, per_page).items
 
     def get_product_by_id(self, id):
         try:

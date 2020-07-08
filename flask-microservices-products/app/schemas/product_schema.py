@@ -1,6 +1,12 @@
 from marshmallow import Schema, fields
 
 
+class ProductQueryArgsSchema(Schema):
+    name = fields.String()
+    page = fields.Int()
+    per_page = fields.Int()
+
+
 class ProductRequestSchema(Schema):
     name = fields.String(required=True)
     description = fields.String(required=True)
