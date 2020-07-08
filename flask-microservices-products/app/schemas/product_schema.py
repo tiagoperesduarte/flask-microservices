@@ -1,12 +1,15 @@
 from marshmallow import Schema, fields
 
 
-class ProductSchema(Schema):
-    id = fields.String(dump_only=True)
+class ProductRequestSchema(Schema):
+    name = fields.String(required=True)
+    description = fields.String(required=True)
+    price = fields.Float(required=True)
+
+
+class ProductResponseSchema(Schema):
+    id = fields.String()
     name = fields.String()
     description = fields.String()
     price = fields.Float()
-    created_on = fields.DateTime(dump_only=True)
-
-    class Meta:
-        ordered = True
+    created_on = fields.DateTime()

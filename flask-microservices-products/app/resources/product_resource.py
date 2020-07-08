@@ -3,40 +3,40 @@ from flask_smorest import Blueprint, abort
 
 from app.errors.resource_not_found_error import ResourceNotFoundError
 from app.models.product import Product
-from app.schemas.product_schema import ProductSchema
+from app.schemas.product_schema import ProductRequestSchema, ProductResponseSchema
 from app.services.product_service import ProductService
 
-blp = Blueprint(
+product_blp = Blueprint(
     'products', 'products', url_prefix='/api/products'
 )
 
 product_service = ProductService()
 
 
-@blp.route('')
+@product_blp.route('')
 class Products(MethodView):
-    @blp.response(ProductSchema(many=True))
+    @product_blp.response(ProductResponseSchema(many=True))
     def get(self):
         return product_service.get_products()
 
-    @blp.arguments(ProductSchema)
-    @blp.response(ProductSchema, code=201)
+    @product_blp.arguments(ProductRequestSchema)
+    @product_blp.response(ProductResponseSchema, code=201)
     def post(self, data):
         product = Product.from_dict(data)
         return product_service.create_product(product)
 
 
-@blp.route('/<product_id>')
+@product_blp.route('/<product_id>')
 class ProductsById(MethodView):
-    @blp.response(ProductSchema)
+    @product_blp.response(ProductResponseSchema)
     def get(self, product_id):
         try:
             return product_service.get_product_by_id(product_id)
         except ResourceNotFoundError as e:
             abort(404, message=str(e))
 
-    @blp.arguments(ProductSchema)
-    @blp.response(ProductSchema)
+    @product_blp.arguments(ProductRequestSchema)
+    @product_blp.response(ProductResponseSchema)
     def put(self, data, product_id):
         try:
             product = Product.from_dict(data)
@@ -44,7 +44,7 @@ class ProductsById(MethodView):
         except ResourceNotFoundError as e:
             abort(404, message=str(e))
 
-    @blp.response(code=204)
+    @product_blp.response(code=204)
     def delete(self, product_id):
         try:
             product_service.delete_product_by_id(product_id)
