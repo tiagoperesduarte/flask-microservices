@@ -1,5 +1,5 @@
 from flask_mongoengine import Pagination
-from mongoengine import DoesNotExist
+from mongoengine import DoesNotExist, ValidationError
 
 from app.models.product import Product
 
@@ -18,7 +18,9 @@ class ProductRepository:
     def get_product_by_id(self, id):
         try:
             return Product.objects.get(id=id)
-        except DoesNotExist as err:
+        except DoesNotExist:
+            return None
+        except ValidationError:
             return None
 
     def product_exists_by_id(self, id):
