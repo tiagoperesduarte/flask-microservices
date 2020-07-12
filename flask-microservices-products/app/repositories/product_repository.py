@@ -11,7 +11,7 @@ class ProductRepository:
         if not name:
             products = Product.objects()
         else:
-            products = Product.objects(name__contains=name)
+            products = Product.objects(name__icontains=name)
 
         return Pagination(products, page, per_page).items
 
