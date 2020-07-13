@@ -1,0 +1,7 @@
+Flask==1.1.2
+flask-mongoengine==0.9.5
+flask-smorest==0.23.0
+marshmallow==3.7.0
+python-dotenv==0.14.0
+pytest==5.4.3
+pytest-cov==2.10.0
