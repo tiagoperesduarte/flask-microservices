@@ -1,6 +1,7 @@
 import pytest
 
 from app.models.product import Product
+from app.utils.string_utils import StringUtils
 from tests.mock.product_mock import get_mock_product
 
 API_URL = '/api/products'
@@ -56,7 +57,8 @@ def test_product_list_by_name(client):
         get_mock_product(name='Soundbar LG SK9Y')
     ]
 
-    keyword = mock_products[0]['name']
+    wanted_product = mock_products[0]
+    keyword = StringUtils.get_first_word(wanted_product['name'])
 
     for mock_product in mock_products:
         client.post(API_URL, json=mock_product)
@@ -67,7 +69,7 @@ def test_product_list_by_name(client):
     assert res.status_code == 200
     assert res.content_type == 'application/json'
     assert len(data) == 1
-    assert data[0]['name'] == keyword
+    assert data[0]['name'] == wanted_product['name']
 
 
 def test_product_create_success(client):
