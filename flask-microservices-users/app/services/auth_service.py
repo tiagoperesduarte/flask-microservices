@@ -1,3 +1,5 @@
+from flask_jwt_extended import create_access_token, create_refresh_token
+
 from app.errors.bad_credentials_error import BadCredentialsError
 from app.models.current_user import CurrentUser
 from app.repositories.user_repository import UserRepository
@@ -20,14 +22,14 @@ class AuthService:
         current_user = self.authenticate(email, password)
 
         return {
-            'access_token': SecurityUtils.create_access_token(current_user),
-            'refresh_token': SecurityUtils.create_refresh_token(current_user)
+            'access_token': create_access_token(identity=current_user),
+            'refresh_token': create_refresh_token(identity=current_user)
         }
 
     def refresh_token(self):
         current_user = SecurityUtils.get_current_user()
 
         return {
-            'access_token': SecurityUtils.create_access_token(current_user),
-            'refresh_token': SecurityUtils.create_refresh_token(current_user)
+            'access_token': create_access_token(identity=current_user),
+            'refresh_token': create_refresh_token(identity=current_user)
         }

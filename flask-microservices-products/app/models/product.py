@@ -1,6 +1,6 @@
 import datetime
 
-from app.config.database import db
+from app.config.database_config import db
 
 
 class Product(db.Document):
