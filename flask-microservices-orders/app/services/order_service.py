@@ -15,7 +15,7 @@ class OrderService:
         if not order:
             raise ResourceNotFoundError(f'Order not found with identifier {id}')
 
-        return self.order_repository.get_order_by_id(id)
+        return order
 
     def order_exists_by_id(self, id):
         return self.order_repository.order_exists_by_id(id)

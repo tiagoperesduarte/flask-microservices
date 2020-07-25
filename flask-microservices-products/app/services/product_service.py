@@ -15,7 +15,7 @@ class ProductService:
         if not product:
             raise ResourceNotFoundError(f'Product not found with identifier {id}')
 
-        return self.product_repository.get_product_by_id(id)
+        return product
 
     def product_exists_by_id(self, id):
         return self.product_repository.product_exists_by_id(id)

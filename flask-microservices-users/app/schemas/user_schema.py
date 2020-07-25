@@ -10,6 +10,7 @@ class UserQueryArgsSchema(Schema):
 class UserRequestSchema(Schema):
     name = fields.String(required=True)
     email = fields.String(required=True)
+    password = fields.String(required=True)
 
 
 class UserResponseSchema(Schema):

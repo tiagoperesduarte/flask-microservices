@@ -23,8 +23,22 @@ class UserRepository:
         except ValidationError:
             return None
 
+    def get_user_by_email(self, email):
+        try:
+            return User.objects.get(email=email)
+        except DoesNotExist:
+            return None
+
     def user_exists_by_id(self, id):
         user = self.get_user_by_id(id)
+
+        if not user:
+            return False
+
+        return True
+
+    def user_exists_by_email(self, email):
+        user = self.get_user_by_email(email)
 
         if not user:
             return False
