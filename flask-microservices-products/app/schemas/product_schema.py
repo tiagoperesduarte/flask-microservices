@@ -15,6 +15,7 @@ class ProductRequestSchema(Schema):
 
 class ProductResponseSchema(Schema):
     id = fields.String()
+    user_id = fields.String()
     name = fields.String()
     description = fields.String()
     price = fields.Float()

@@ -4,6 +4,7 @@ from app.config.database_config import db
 
 
 class Product(db.Document):
+    user_id = db.StringField()
     name = db.StringField()
     description = db.StringField()
     price = db.FloatField()
