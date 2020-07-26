@@ -15,9 +15,9 @@ auth_service = AuthService()
 @auth_blp.route('/login', methods=['POST'])
 @auth_blp.arguments(AuthRequestSchema)
 @auth_blp.response(AuthResponseSchema, code=200)
-def create_token(data):
+def login(data):
     try:
-        return auth_service.create_token(data['email'], data['password'])
+        return auth_service.authenticate(data['email'], data['password'])
     except BadCredentialsError as e:
         abort(401, message=str(e))
 

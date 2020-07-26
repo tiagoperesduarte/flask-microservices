@@ -2,7 +2,7 @@ import pytest
 from flask_jwt_extended import create_access_token
 
 from app import create_app
-from app.models.current_user import CurrentUser
+from app.security.current_user import CurrentUser
 
 
 @pytest.fixture(scope='session')

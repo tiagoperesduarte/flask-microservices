@@ -1,9 +1,9 @@
 from flask_jwt_extended import create_access_token, create_refresh_token
 
 from app.errors.bad_credentials_error import BadCredentialsError
-from app.models.current_user import CurrentUser
 from app.repositories.user_repository import UserRepository
-from app.utils.security_utils import SecurityUtils
+from app.security.current_user import CurrentUser
+from app.security.security_utils import SecurityUtils
 
 
 class AuthService:
@@ -16,10 +16,7 @@ class AuthService:
         if not user or not user.verify_password(password):
             raise BadCredentialsError('Email or password incorrect')
 
-        return CurrentUser.from_user(user)
-
-    def create_token(self, email, password):
-        current_user = self.authenticate(email, password)
+        current_user = CurrentUser.from_user(user)
 
         return {
             'access_token': create_access_token(identity=current_user),

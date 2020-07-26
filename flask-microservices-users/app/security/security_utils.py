@@ -1,6 +1,6 @@
 from flask_jwt_extended import get_raw_jwt
 
-from app.models.current_user import CurrentUser
+from app.security.current_user import CurrentUser
 
 
 class SecurityUtils:

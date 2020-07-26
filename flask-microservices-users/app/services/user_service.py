@@ -1,7 +1,7 @@
 from app.errors.resource_not_found_error import ResourceNotFoundError
 from app.errors.user_already_exists_error import UserAlreadyExistsError
 from app.repositories.user_repository import UserRepository
-from app.utils.security_utils import SecurityUtils
+from app.security.security_utils import SecurityUtils
 
 
 class UserService:
