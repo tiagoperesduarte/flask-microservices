@@ -1,3 +1,4 @@
+from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
 
 from app.errors.resource_not_found_error import ResourceNotFoundError
@@ -15,6 +16,7 @@ product_service = ProductService()
 @product_blp.route('', methods=['GET'])
 @product_blp.arguments(ProductQueryArgsSchema, location='query')
 @product_blp.response(ProductResponseSchema(many=True))
+@jwt_required
 def get_products(args):
     name = args.get('name')
     page = args.get('page', 1)
@@ -25,6 +27,7 @@ def get_products(args):
 
 @product_blp.route('/<product_id>', methods=['GET'])
 @product_blp.response(ProductResponseSchema)
+@jwt_required
 def get_product_by_id(product_id):
     try:
         return product_service.get_product_by_id(product_id)
@@ -35,6 +38,7 @@ def get_product_by_id(product_id):
 @product_blp.route('', methods=['POST'])
 @product_blp.arguments(ProductRequestSchema)
 @product_blp.response(ProductResponseSchema, code=201)
+@jwt_required
 def create_product(data):
     product = Product.from_dict(data)
     return product_service.create_product(product)
@@ -43,6 +47,7 @@ def create_product(data):
 @product_blp.route('/<product_id>', methods=['PUT'])
 @product_blp.arguments(ProductRequestSchema)
 @product_blp.response(ProductResponseSchema)
+@jwt_required
 def update_product(data, product_id):
     try:
         product = Product.from_dict(data)
@@ -53,6 +58,7 @@ def update_product(data, product_id):
 
 @product_blp.route('/<product_id>', methods=['DELETE'])
 @product_blp.response(code=204)
+@jwt_required
 def delete_product_by_id(product_id):
     try:
         product_service.delete_product_by_id(product_id)
