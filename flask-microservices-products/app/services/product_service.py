@@ -22,6 +22,8 @@ class ProductService:
 
     def create_product(self, product):
         current_user = SecurityUtils.get_current_user()
+
+        product.id = None
         product.user_id = current_user.id
 
         return self.product_repository.save_product(product)
@@ -38,9 +40,8 @@ class ProductService:
 
     def delete_product_by_id(self, id):
         current_user = SecurityUtils.get_current_user()
-        product = self.product_repository.get_product_by_id_and_user_id(id, current_user.id)
 
-        if not product:
+        if not self.product_repository.product_exists_by_id_and_user_id(id, current_user.id):
             raise ResourceNotFoundError(f'Product not found with identifier {id}')
 
         self.product_repository.delete_product_by_id_and_user_id(id, current_user.id)
