@@ -9,3 +9,5 @@ class OrderItemRequestSchema(Schema):
 class OrderItemResponseSchema(Schema):
     product_id = fields.String()
     quantity = fields.Int()
+    price = fields.Float()
+    total = fields.Float()

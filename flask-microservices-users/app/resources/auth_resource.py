@@ -2,7 +2,7 @@ from flask_jwt_extended import jwt_refresh_token_required
 from flask_smorest import Blueprint, abort
 
 from app.errors.bad_credentials_error import BadCredentialsError
-from app.schemas.auth_schema import AuthRequestSchema, AuthResponseSchema
+from app.resources.schemas.auth_schema import AuthRequestSchema, AuthResponseSchema
 from app.services.auth_service import AuthService
 
 auth_blp = Blueprint(

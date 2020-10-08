@@ -3,7 +3,7 @@ from flask_smorest import Blueprint, abort
 
 from app.errors.resource_not_found_error import ResourceNotFoundError
 from app.models.product import Product
-from app.schemas.product_schema import ProductRequestSchema, ProductResponseSchema, ProductQueryArgsSchema
+from app.resources.schemas.product_schema import ProductQueryArgsSchema, ProductResponseSchema, ProductRequestSchema
 from app.services.product_service import ProductService
 
 product_blp = Blueprint(

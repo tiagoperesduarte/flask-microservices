@@ -3,7 +3,7 @@ from flask_smorest import Blueprint, abort
 
 from app.errors.resource_not_found_error import ResourceNotFoundError
 from app.models.order import Order
-from app.schemas.order_schema import OrderRequestSchema, OrderResponseSchema, OrderQueryArgsSchema
+from app.resources.schemas.order_schema import OrderQueryArgsSchema, OrderResponseSchema, OrderRequestSchema
 from app.services.order_service import OrderService
 
 order_blp = Blueprint(

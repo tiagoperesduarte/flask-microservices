@@ -4,7 +4,7 @@ from flask_smorest import Blueprint, abort
 from app.errors.resource_not_found_error import ResourceNotFoundError
 from app.errors.user_already_exists_error import UserAlreadyExistsError
 from app.models.user import User
-from app.schemas.user_schema import UserRequestSchema, UserResponseSchema, UserQueryArgsSchema
+from app.resources.schemas.user_schema import UserQueryArgsSchema, UserResponseSchema, UserRequestSchema
 from app.services.user_service import UserService
 
 user_blp = Blueprint(
