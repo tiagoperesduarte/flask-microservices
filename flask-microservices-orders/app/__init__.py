@@ -1,8 +1,8 @@
 from flask import Flask
 
-from app.config.database_config import configure_db
-from app.config.routes_config import configure_routes
-from app.config.security_config import configure_security
+from app.configs.database_config import configure_db
+from app.configs.routes_config import configure_routes
+from app.configs.security_config import configure_security
 
 
 def create_app():

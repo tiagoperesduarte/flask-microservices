@@ -1,7 +1,7 @@
 import datetime
 
-from app.config.bcrypt_config import bcrypt
-from app.config.database_config import db
+from app.configs.bcrypt_config import bcrypt
+from app.configs.database_config import db
 
 
 class User(db.Document):

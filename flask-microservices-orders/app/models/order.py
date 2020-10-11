@@ -1,6 +1,6 @@
 import datetime
 
-from app.config.database_config import db
+from app.configs.database_config import db
 from app.models.order_item import OrderItem
 
 
