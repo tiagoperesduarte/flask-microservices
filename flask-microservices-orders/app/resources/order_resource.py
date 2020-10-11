@@ -1,7 +1,7 @@
 from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
 
-from app.errors.resource_not_found_error import ResourceNotFoundError
+from app.exceptions.http_exceptions import ResourceNotFoundException
 from app.models.order import Order
 from app.resources.schemas.order_schema import OrderQueryArgsSchema, OrderResponseSchema, OrderRequestSchema
 from app.services.order_service import OrderService
@@ -30,7 +30,7 @@ def get_orders(args):
 def get_order_by_id(order_id):
     try:
         return order_service.get_order_by_id(order_id)
-    except ResourceNotFoundError as e:
+    except ResourceNotFoundException as e:
         abort(404, message=str(e))
 
 
@@ -51,7 +51,7 @@ def update_order(data, order_id):
     try:
         order = Order.from_dict(data)
         return order_service.update_order(order_id, order)
-    except ResourceNotFoundError as e:
+    except ResourceNotFoundException as e:
         abort(404, message=str(e))
 
 
@@ -61,5 +61,5 @@ def update_order(data, order_id):
 def delete_order_by_id(order_id):
     try:
         order_service.delete_order_by_id(order_id)
-    except ResourceNotFoundError as e:
+    except ResourceNotFoundException as e:
         abort(404, message=str(e))

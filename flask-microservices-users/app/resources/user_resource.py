@@ -1,8 +1,7 @@
 from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
 
-from app.errors.resource_not_found_error import ResourceNotFoundError
-from app.errors.user_already_exists_error import UserAlreadyExistsError
+from app.exceptions.http_exceptions import ResourceNotFoundException, ConflictException
 from app.models.user import User
 from app.resources.schemas.user_schema import UserQueryArgsSchema, UserResponseSchema, UserRequestSchema
 from app.services.user_service import UserService
@@ -32,7 +31,7 @@ def get_users(args):
 def get_user_by_id(user_id):
     try:
         return user_service.get_user_by_id(user_id)
-    except ResourceNotFoundError as e:
+    except ResourceNotFoundException as e:
         abort(404, message=str(e))
 
 
@@ -42,7 +41,7 @@ def get_user_by_id(user_id):
 def get_current_user():
     try:
         return user_service.get_current_user()
-    except ResourceNotFoundError as e:
+    except ResourceNotFoundException as e:
         abort(404, message=str(e))
 
 
@@ -53,7 +52,7 @@ def create_user(data):
     try:
         user = User.from_dict(data)
         return user_service.create_user(user)
-    except UserAlreadyExistsError as e:
+    except ConflictException as e:
         abort(409, message=str(e))
 
 
@@ -65,7 +64,7 @@ def update_user(data, user_id):
     try:
         user = User.from_dict(data)
         return user_service.update_user(user_id, user)
-    except ResourceNotFoundError as e:
+    except ResourceNotFoundException as e:
         abort(404, message=str(e))
 
 
@@ -75,5 +74,5 @@ def update_user(data, user_id):
 def delete_user_by_id(user_id):
     try:
         user_service.delete_user_by_id(user_id)
-    except ResourceNotFoundError as e:
+    except ResourceNotFoundException as e:
         abort(404, message=str(e))

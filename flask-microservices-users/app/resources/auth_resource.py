@@ -1,7 +1,7 @@
 from flask_jwt_extended import jwt_refresh_token_required
 from flask_smorest import Blueprint, abort
 
-from app.errors.bad_credentials_error import BadCredentialsError
+from app.exceptions.http_exceptions import BadCredentialsException
 from app.resources.schemas.auth_schema import AuthRequestSchema, AuthResponseSchema
 from app.services.auth_service import AuthService
 
@@ -18,7 +18,7 @@ auth_service = AuthService()
 def login(data):
     try:
         return auth_service.authenticate(data['email'], data['password'])
-    except BadCredentialsError as e:
+    except BadCredentialsException as e:
         abort(401, message=str(e))
 
 

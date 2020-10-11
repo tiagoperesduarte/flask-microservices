@@ -1,7 +1,7 @@
 from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
 
-from app.errors.resource_not_found_error import ResourceNotFoundError
+from app.exceptions.http_exceptions import ResourceNotFoundException
 from app.models.product import Product
 from app.resources.schemas.product_schema import ProductQueryArgsSchema, ProductResponseSchema, ProductRequestSchema
 from app.services.product_service import ProductService
@@ -31,7 +31,7 @@ def get_products(args):
 def get_product_by_id(product_id):
     try:
         return product_service.get_product_by_id(product_id)
-    except ResourceNotFoundError as e:
+    except ResourceNotFoundException as e:
         abort(404, message=str(e))
 
 
@@ -52,7 +52,7 @@ def update_product(data, product_id):
     try:
         product = Product.from_dict(data)
         return product_service.update_product(product_id, product)
-    except ResourceNotFoundError as e:
+    except ResourceNotFoundException as e:
         abort(404, message=str(e))
 
 
@@ -62,5 +62,5 @@ def update_product(data, product_id):
 def delete_product_by_id(product_id):
     try:
         product_service.delete_product_by_id(product_id)
-    except ResourceNotFoundError as e:
+    except ResourceNotFoundException as e:
         abort(404, message=str(e))

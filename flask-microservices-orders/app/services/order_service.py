@@ -1,4 +1,4 @@
-from app.errors.resource_not_found_error import ResourceNotFoundError
+from app.exceptions.http_exceptions import ResourceNotFoundException
 from app.repositories.order_repository import OrderRepository
 from app.security.security_utils import SecurityUtils
 
@@ -16,7 +16,7 @@ class OrderService:
         order = self.order_repository.get_order_by_id_and_user_id(id, current_user.id)
 
         if not order:
-            raise ResourceNotFoundError(f'Order not found with identifier {id}')
+            raise ResourceNotFoundException(f'Order not found with identifier {id}')
 
         return order
 
@@ -32,7 +32,7 @@ class OrderService:
         current_user = SecurityUtils.get_current_user()
 
         if not self.order_repository.order_exists_by_id_and_user_id(id, current_user.id):
-            raise ResourceNotFoundError(f'Order not found with identifier {id}')
+            raise ResourceNotFoundException(f'Order not found with identifier {id}')
 
         order.id = id
 
@@ -42,6 +42,6 @@ class OrderService:
         current_user = SecurityUtils.get_current_user()
 
         if not self.order_repository.order_exists_by_id_and_user_id(id, current_user.id):
-            raise ResourceNotFoundError(f'Order not found with identifier {id}')
+            raise ResourceNotFoundException(f'Order not found with identifier {id}')
 
         self.order_repository.delete_order_by_id_and_user_id(id, current_user.id)

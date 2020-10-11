@@ -1,4 +1,4 @@
-from app.errors.resource_not_found_error import ResourceNotFoundError
+from app.exceptions.http_exceptions import ResourceNotFoundException
 from app.repositories.product_repository import ProductRepository
 from app.security.security_utils import SecurityUtils
 
@@ -16,7 +16,7 @@ class ProductService:
         product = self.product_repository.get_product_by_id_and_user_id(id, current_user.id)
 
         if not product:
-            raise ResourceNotFoundError(f'Product not found with identifier {id}')
+            raise ResourceNotFoundException(f'Product not found with identifier {id}')
 
         return product
 
@@ -32,7 +32,7 @@ class ProductService:
         current_user = SecurityUtils.get_current_user()
 
         if not self.product_repository.product_exists_by_id_and_user_id(id, current_user.id):
-            raise ResourceNotFoundError(f'Product not found with identifier {id}')
+            raise ResourceNotFoundException(f'Product not found with identifier {id}')
 
         product.id = id
 
@@ -42,6 +42,6 @@ class ProductService:
         current_user = SecurityUtils.get_current_user()
 
         if not self.product_repository.product_exists_by_id_and_user_id(id, current_user.id):
-            raise ResourceNotFoundError(f'Product not found with identifier {id}')
+            raise ResourceNotFoundException(f'Product not found with identifier {id}')
 
         self.product_repository.delete_product_by_id_and_user_id(id, current_user.id)

@@ -1,5 +1,4 @@
-from app.errors.resource_not_found_error import ResourceNotFoundError
-from app.errors.user_already_exists_error import UserAlreadyExistsError
+from app.exceptions.http_exceptions import ResourceNotFoundException, ConflictException
 from app.repositories.user_repository import UserRepository
 from app.security.security_utils import SecurityUtils
 
@@ -19,7 +18,7 @@ class UserService:
         user = self.user_repository.get_user_by_id(id)
 
         if not user:
-            raise ResourceNotFoundError(f'User not found with identifier {id}')
+            raise ResourceNotFoundException(f'User not found with identifier {id}')
 
         return user
 
@@ -27,7 +26,7 @@ class UserService:
         user = self.user_repository.get_user_by_email(email)
 
         if not user:
-            raise ResourceNotFoundError(f'User not found with identifier {email}')
+            raise ResourceNotFoundException(f'User not found with identifier {email}')
 
         return user
 
@@ -41,7 +40,7 @@ class UserService:
         exists = self.user_exists_by_email(user.email)
 
         if exists:
-            raise UserAlreadyExistsError('That email address is already in use')
+            raise ConflictException('That email address is already in use')
 
         user.id = None
         user.hash_password()
@@ -50,7 +49,7 @@ class UserService:
 
     def update_user(self, id, user):
         if not self.user_exists_by_id(id):
-            raise ResourceNotFoundError(f'User not found with identifier {id}')
+            raise ResourceNotFoundException(f'User not found with identifier {id}')
 
         user.id = id
 
@@ -60,6 +59,6 @@ class UserService:
         user = self.user_repository.get_user_by_id(id)
 
         if not user:
-            raise ResourceNotFoundError(f'User not found with identifier {id}')
+            raise ResourceNotFoundException(f'User not found with identifier {id}')
 
         self.user_repository.delete_user_by_id(id)
